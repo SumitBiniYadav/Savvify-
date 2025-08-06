@@ -1,0 +1,861 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vigraph Studio - Service</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .logo::before {
+            content: "ነ";
+            margin-right: 8px;
+            background: #fff;
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 3px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #ccc;
+        }
+
+        .contact-btn {
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .contact-btn:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        .flicker-in-1 {
+            -webkit-animation: flicker-in-1 2s linear both;
+                    animation: flicker-in-1 2s linear both;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23111" width="1200" height="800"/><g fill="%23333"><circle cx="200" cy="200" r="2"/><circle cx="400" cy="150" r="1.5"/><circle cx="600" cy="300" r="2"/><circle cx="800" cy="100" r="1"/><circle cx="1000" cy="250" r="1.5"/></g></svg>');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        /* Service Section */
+        .service-section {
+            padding: 100px 0;
+            background: #000;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .service-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .service-text h3 {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .service-text h2 {
+            font-size: 3rem;
+            font-weight: 300;
+            line-height: 1.2;
+            margin-bottom: 30px;
+        }
+
+        .service-text p {
+            color: #ccc;
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+
+        .learn-more-btn {
+            background: #fff;
+            color: #000;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .learn-more-btn:hover {
+            background: #ccc;
+        }
+
+        .service-image {
+            text-align: center;
+        }
+
+        .service-image img {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-top: 80px;
+        }
+
+        .service-item {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            background: #222;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 24px;
+        }
+
+        .service-item h4 {
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+
+        .service-subtitle {
+            color: #888;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* How We Work Section */
+        .work-section {
+            padding: 100px 0;
+            background: #111;
+        }
+
+        .work-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .work-video {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .work-video img {
+            width: 100%;
+            height: auto;
+        }
+
+        .play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .play-btn:hover {
+            background: #fff;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .work-text h2 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+        }
+
+        .work-text p {
+            color: #ccc;
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+
+        .features-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        .feature-item::before {
+            content: "✓";
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        /* Partners Section */
+        .partners-section {
+            padding: 80px 0;
+            background: #000;
+        }
+
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            align-items: center;
+            justify-items: center;
+        }
+
+        .partner-logo {
+            color: #666;
+            font-size: 20px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 0;
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23222" width="1200" height="600"/></svg>');
+            background-size: cover;
+            background-position: center;
+            text-align: center;
+        }
+
+        .cta-content h3 {
+            color: #888;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .cta-content h2 {
+            font-size: 3rem;
+            font-weight: 300;
+            line-height: 1.2;
+            margin-bottom: 40px;
+        }
+
+        .get-started-btn {
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 15px 40px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .get-started-btn:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        /* Footer */
+        .footer {
+            background: #111;
+            padding: 60px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 40px;
+        }
+
+        .footer-about h4 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-about h4::before {
+            content: "ነ";
+            margin-right: 8px;
+            background: #fff;
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 3px;
+        }
+
+        .footer-about p {
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            width: 35px;
+            height: 35px;
+            background: #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .social-links a:hover {
+            background: #555;
+        }
+
+        .footer-links h4 {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links ul li a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .footer-links ul li a:hover {
+            color: #fff;
+        }
+
+        .contact-info p {
+            color: #ccc;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #333;
+            padding-top: 20px;
+            text-align: center;
+            color: #888;
+            font-size: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .service-content,
+            .work-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .services-grid,
+            .partners-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+
+        @-webkit-keyframes flicker-in-1 {
+            0% {
+                opacity: 0;
+            }
+            10% {
+                opacity: 0;
+            }
+            10.1% {
+                opacity: 1;
+            }
+            10.2% {
+                opacity: 0;
+            }
+            20% {
+                opacity: 0;
+            }
+            20.1% {
+                opacity: 1;
+            }
+            20.6% {
+                opacity: 0;
+            }
+            30% {
+                opacity: 0;
+            }
+            30.1% {
+                opacity: 1;
+            }
+            30.5% {
+                opacity: 1;
+            }
+            30.6% {
+                opacity: 0;
+            }
+            45% {
+                opacity: 0;
+            }
+            45.1% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 1;
+            }
+            55% {
+                opacity: 1;
+            }
+            55.1% {
+                opacity: 0;
+            }
+            57% {
+                opacity: 0;
+            }
+            57.1% {
+                opacity: 1;
+            }
+            60% {
+                opacity: 1;
+            }
+            60.1% {
+                opacity: 0;
+            }
+            65% {
+                opacity: 0;
+            }
+            65.1% {
+                opacity: 1;
+            }
+            75% {
+                opacity: 1;
+            }
+            75.1% {
+                opacity: 0;
+            }
+            77% {
+                opacity: 0;
+            }
+            77.1% {
+                opacity: 1;
+            }
+            85% {
+                opacity: 1;
+            }
+            85.1% {
+                opacity: 0;
+            }
+            86% {
+                opacity: 0;
+            }
+            86.1% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 1;
+            }
+            }
+            @keyframes flicker-in-1 {
+            0% {
+                opacity: 0;
+            }
+            10% {
+                opacity: 0;
+            }
+            10.1% {
+                opacity: 1;
+            }
+            10.2% {
+                opacity: 0;
+            }
+            20% {
+                opacity: 0;
+            }
+            20.1% {
+                opacity: 1;
+            }
+            20.6% {
+                opacity: 0;
+            }
+            30% {
+                opacity: 0;
+            }
+            30.1% {
+                opacity: 1;
+            }
+            30.5% {
+                opacity: 1;
+            }
+            30.6% {
+                opacity: 0;
+            }
+            45% {
+                opacity: 0;
+            }
+            45.1% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 1;
+            }
+            55% {
+                opacity: 1;
+            }
+            55.1% {
+                opacity: 0;
+            }
+            57% {
+                opacity: 0;
+            }
+            57.1% {
+                opacity: 1;
+            }
+            60% {
+                opacity: 1;
+            }
+            60.1% {
+                opacity: 0;
+            }
+            65% {
+                opacity: 0;
+            }
+            65.1% {
+                opacity: 1;
+            }
+            75% {
+                opacity: 1;
+            }
+            75.1% {
+                opacity: 0;
+            }
+            77% {
+                opacity: 0;
+            }
+            77.1% {
+                opacity: 1;
+            }
+            85% {
+                opacity: 1;
+            }
+            85.1% {
+                opacity: 0;
+            }
+            86% {
+                opacity: 0;
+            }
+            86.1% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 1;
+            }
+            }
+
+
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                SAVVIFY
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">Contact Us</a></li>
+                </ul>
+            </nav>
+            <a href="#contact" class="contact-btn">Connect </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="flicker-in-1">Savvify</h1>
+        <div class="breadcrumb">Control Cravings, Conquer Costs</div>
+    </section>
+
+    <!-- Service Section -->
+    <section class="service-section">
+        <div class="container">
+            <div class="service-content">
+                <div class="service-text">
+                    <h3>Our Service</h3>
+                    <h2>Track. Save. Spend Smart.</h2>
+                    <p>Savvify is your personal finance assistant that helps you monitor and manage your spending across fast food and grocery delivery apps like Zomato, Swiggy, Instamart, Zepto, and more. We help you understand your habits, control your cravings, and discover smarter, budget-friendly alternatives — all in one simple dashboard.</p>
+                    <a href="#" class="learn-more-btn">Learn More</a>
+                </div>
+                <div class="service-video">
+                    <video width="400" height="500" autoplay muted loop playsinline>
+                        <source src="{% static 'vid/save.mp4' %}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
+            </div>
+
+            <!-- Services Grid -->
+            <div class="services-grid">
+                <div class="service-item">
+                    <div class="service-icon"><span class="material-symbols-outlined">cognition</span></div>
+                    <h4>Spending Analytics</h4>
+                    <p class="service-subtitle">Track your daily, weekly, and monthly food delivery expenses across apps like Zomato, Swiggy, Zepto, and more.</p>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon"><span class="material-symbols-outlined">emoji_objects</span></div>
+                    <h4>Smart Suggestions</h4>
+                    <p class="service-subtitle">Get AI-based alternatives for your orders and discover healthier, more affordable choices near you.</p>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon"><span class="material-symbols-outlined">notifications_active</span></div>
+                    <h4>Spending Alerts</h4>
+                    <p class="service-subtitle">Receive real-time alerts when you’re about to cross your set spending limit.</p>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon"><span class="material-symbols-outlined">savings</span></div>
+                    <h4>Budget Control</h4>
+                    <p class="service-subtitle">Set daily, weekly, or monthly budgets and let Savvify help you stick to them effortlessly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How We Work Section -->
+    <section class="work-section">
+        <div class="container">
+            <div class="work-content">
+                <div class="work-video">
+                    <img src="{% static 'vid/info.gif' %}" alt="Video editing workspace">
+                    <div class="play-btn">▶</div>
+                </div>
+                <div class="work-text">
+                    <h2>How Savvify Works</h2>
+                    <p>Savvify simplifies the way you manage your spending on food and grocery delivery apps. By analyzing your order history, tracking your expenses, and providing smarter suggestions, we help you take control of your money and make better financial decisions — effortlessly.</p>
+                    <div class="features-list">
+                        <div class="feature-item">Connect your delivery accounts (Zomato, Swiggy, etc.)</div>
+                        <div class="feature-item">Automatically fetch and analyze your spending</div>
+                        <div class="feature-item">View insightful reports and trends</div>
+                        <div class="feature-item">Set custom spending limits and get alerts</div>
+                        <div class="feature-item">Discover cost-effective food alternatives</div>
+                        <div class="feature-item">Track savings and improve your habits</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners Section -->
+    <section class="partners-section">
+        <div class="container">
+            <div class="partners-grid">
+                <div class="partner-logo">ZOMATO</div>
+                <div class="partner-logo">SWIGGY</div>
+                <div class="partner-logo">INSTAMART</div>
+                <div class="partner-logo">ZEPTO</div>
+            </div>
+            <div class="partners-grid" style="margin-top: 40px;">
+                <div class="partner-logo">AMAZON FRESH</div>
+                <div class="partner-logo">UBER EATS</div>
+                <div class="partner-logo">FOOD PANDA</div>
+                <div class="partner-logo">MAC DELIVERY</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h3>Get Started Today</h3>
+                <h2>We’re Always Ready To<br>Help You Spend Smarter</h2>
+                <a href="#" class="get-started-btn">Get Started</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <!-- About Savvify -->
+            <div class="footer-about">
+                <h4>SAVVIFY</h4>
+                <p>Savvify helps you track your spending on food delivery apps, control your budget, and discover smarter ways to save money — all in one place.</p>
+                <div class="social-links">
+                    <a href="#">f</a>
+                    <a href="#">t</a>
+                    <a href="#">in</a>
+                </div>
+            </div>
+            
+            <!-- Quick Links -->
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">Dashboard</a></li>
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">How It Works</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            
+            <!-- Contact Info -->
+            <div class="footer-links">
+                <h4>Get In Touch</h4>
+                <div class="contact-info">
+                    <p>📍 Ahmedabad, Gujarat, India</p>
+                    <p>📞 +91 98765 43210</p>
+                    <p>✉️ support@savvify.in</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <p>&copy; 2025 Savvify | Built with ❤️ to make your money go further</p>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,790 @@
+{% extends "header.html" %}
+{% block content %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Work, The Efficient Way</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: radial-gradient(ellipse at center, rgba(154, 255, 0, 0.1) 0%, transparent 70%);
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: #cccccc;
+            margin-bottom: 30px;
+            max-width: 600px;
+        }
+
+        .cta-button {
+            background: #9aff00;
+            color: #000000;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            background: #7acc00;
+            transform: translateY(-2px);
+        }
+
+        .hero-circle {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            border: 2px solid rgba(154, 255, 0, 0.3);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Trusted by section */
+        .trusted-by {
+            padding: 150px 0 80px 0;
+            text-align: center;
+        }
+
+        .trusted-by h3 {
+            color: #666666;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        .company-logos {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            opacity: 0.6;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .company-logos span {
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            padding-bottom: 10px;
+
+        }
+
+        .feature-item {
+            margin-bottom: 80px;
+            max-width: 800px;
+        }
+
+        .feature-item h2 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .feature-item p {
+            font-size: 1.1rem;
+            color: #cccccc;
+            line-height: 1.8;
+        }
+
+        .highlight {
+            color: #9aff00;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 80px 0;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            background: #9aff00;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #000000;
+        }
+
+        .service-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .service-card p {
+            color: #cccccc;
+            font-size: 0.95rem;
+        }
+
+        /* Tools Section */
+        .tools-section {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .tool-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+        .tool-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-3px);
+        }
+
+        .tool-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            margin: 0 auto 15px;
+        }
+
+        .tool-icon span {
+            color: #9aff00;
+            text-align: center;
+            font-size: 2rem;
+            
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .stats-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+
+        .stats-text {
+            flex: 1;
+            text-align: left;
+        }
+
+        .stats-text h2 {
+            font-size: 2.2rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .stats-image {
+            width: 100%;
+            max-width: 400px;
+            height: 500px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stats-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .stats-numbers {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            margin-top: 50px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #9aff00;
+            display: block;
+        }
+
+        .stat-label {
+            color: #cccccc;
+            font-size: 0.9rem;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 100px 0;
+        }
+
+        .testimonials h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 60px;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .testimonial-text {
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            color: #cccccc;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            background: #9aff00;
+            border-radius: 50%;
+        }
+
+        .author-info h4 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .author-info p {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 100px 0;
+        }
+
+        .faq-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 60px;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .faq-question {
+            padding: 20px 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1rem;
+        }
+
+        .faq-question:hover {
+            color: #9aff00;
+        }
+
+        .faq-answer {
+            padding: 0 0 20px 0;
+            color: #cccccc;
+            display: none;
+        }
+
+        /* CTA Section */
+        .final-cta {
+            padding: 100px 0;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(154, 255, 0, 0.1) 0%, transparent 50%);
+        }
+
+        .final-cta h2 {
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        .final-cta p {
+            font-size: 1.2rem;
+            color: #cccccc;
+            margin-bottom: 40px;
+        }
+
+        .services-best {
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .services-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .services-subtitle {
+            font-size: 1.1rem;
+            color: #ccc;
+            margin-bottom: 60px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .services-grid-2col {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .service-box {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(6px);
+            transition: all 0.3s ease;
+        }
+
+        .service-box:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-4px);
+        }
+
+        .service-box img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 20px;
+        }
+
+        .service-box h3 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .service-box p {
+            font-size: 0.95rem;
+            color: #cccccc;
+            line-height: 1.6;
+        }
+
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .stats-content {
+                flex-direction: column;
+            }
+            
+            .stats-numbers {
+                gap: 40px;
+            }
+            
+            .company-logos {
+                justify-content: center;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+   
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-circle"></div>
+        <div class="hero-content">
+            <h1>Why Savvify<br>Track. Cut. Thrive.</h1>
+            <p>Savvify empowers you to take control of your spending on fast food delivery apps like Zomato, Swiggy, Zepto, and more. Track your habits, cut down on unnecessary orders, and start saving money—while building a healthier lifestyle. It’s not just about spending less—it’s about living better.</p>
+        </div>
+    </section>
+
+    <!-- Trusted By Section -->
+    <section class="trusted-by">
+        <div class="container">
+            <h3> Empowering Smart Spenders</h3>
+            <div class="company-logos">
+                <span><span class="material-symbols-outlined">fastfood</span>&nbsp;&nbsp;&nbsp;Less Delivery Guilt</span>
+                <span><span class="material-symbols-outlined">monitoring</span>&nbsp;&nbsp;&nbsp; Daily Expense Tracking</span>
+                <span><span class="material-symbols-outlined">check_circle</span>&nbsp;&nbsp;&nbsp; Budget Goals Hit</span>
+                <span><span class="material-symbols-outlined">restaurant</span>&nbsp;&nbsp;&nbsp; Healthier Eating Habits</span>
+                <span><span class="material-symbols-outlined">notifications</span>&nbsp;&nbsp;&nbsp; Smart Alerts</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="feature-item">
+                <h2><span class="highlight">● DESIGN WITH PURPOSE</span><br>At Savvify, we focus on clean, user-friendly design that makes budgeting simple and intuitive. You don’t need flashy distractions—just smart visuals that help you track, cut, and thrive with ease.</h2>
+            </div>
+            
+            <div class="feature-item">
+                <h2><span class="highlight">● WORRY-FREE</span><br>Say goodbye to the stress of overspending. Savvify tracks your fast food orders, keeps you within budget, and helps you build healthier habits—without the mental load.</h2>
+            </div>
+
+            <div class="feature-item">
+                <h2><span class="highlight">● SMART SPENDING</span><br>Track every rupee you spend on food delivery apps. Savvify helps you identify patterns and cut down on unnecessary expenses.</h2>
+            </div>
+
+            <div class="feature-item">
+                <h2><span class="highlight">● HEALTHIER CHOICES</span><br>Less junk food, more mindful eating. Savvify nudges you to skip that late-night order and choose better for your body and wallet.</h2>
+            </div>
+        </div>
+    </section>
+
+   <!-- Tools Section -->
+    <section class="tools-section">
+        <div class="container">
+            <div class="tools-grid">
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <span class="material-symbols-outlined">track_changes</span>
+                    </div>
+                    <p>Track your eating & spending habits</p>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <span class="material-symbols-outlined">check_circle</span>
+                    </div>
+                    <p>Get insights & personalized tips</p>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <span class="material-symbols-outlined">notifications</span>
+                    </div>
+                    <p>Set goals & stay accountable</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-content">
+                <div class="stats-text">
+                    <h2><span class="highlight"> REAL IMPACT</span><br>We're not just tracking numbers—we're transforming lives. By helping users become more mindful of their habits, we're building a culture of healthier choices and smarter spending, one small step and one order at a time.</h2>
+                </div>
+                <div class="stats-image">
+                    <img src="{% static 'img/healthy.jpeg' %}" alt="Stats Image" style="max-width: 100%; height: auto;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- What We Do Best Section -->
+    <section class="services-best">
+        <div class="container">
+            <h2 class="services-title">What We Do Best</h2>
+            <p class="services-subtitle">Savvify empowers you to take charge of your food delivery expenses with smart tools, real-time tracking, and intelligent alerts—so your budget stays in your control, not in your cravings.</p>
+            
+            <div class="services-grid-2col">
+                <div class="service-box">
+                    <span class="material-symbols-outlined">search_insights</span>
+                    <h3>Spending Insights</h3>
+                    <p>Get a clear, data-driven view of your spending across apps like Swiggy, Zomato, Blinkit, Zepto, and more.</p>
+                </div>
+                <div class="service-box">
+                    <span class="material-symbols-outlined">tune</span>
+                    <h3>Smart Budgeting</h3>
+                    <p>Set monthly limits, customize app-wise spending caps, and stick to your goals without the guesswork.</p>
+                </div>
+                <div class="service-box">
+                    <span class="material-symbols-outlined">notifications_active</span>
+                    <h3>Real-Time Alerts</h3>
+                    <p>Get notified instantly when you're nearing or crossing your set budget—before things spiral.</p>
+                </div>
+                <div class="service-box">
+                    <span class="material-symbols-outlined">track_changes</span>
+                    <h3>Delivery App Tracking</h3>
+                    <p>Automatically track orders from top food and grocery apps in India, all in one seamless dashboard.</p>
+                </div>
+                <div class="service-box">
+                    <span class="material-symbols-outlined">sync_alt</span>
+                    <h3>Spending Control</h3>
+                    <p>Gain control over impulse orders with a visual breakdown of where your money is really going.</p>
+                </div>
+                <div class="service-box">
+                    <span class="material-symbols-outlined">analytics</span>
+                    <h3>Monthly Reports</h3>
+                    <p>Receive clean, easy-to-understand reports that help you reflect, reset, and reduce your unnecessary expenses.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <h2><span class="highlight">FAQ</span><br>We've got the answers</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    Which apps does Savvify support?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Savvify currently supports top food and grocery delivery apps in India, including Swiggy, Zomato, Blinkit, Zepto, and BigBasket.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    How does Savvify track my spending?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Savvify analyzes your order confirmation emails or connected transaction data to track your spending automatically across delivery apps.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Can I set a monthly budget?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Yes, you can easily set a custom monthly spending limit. Savvify will alert you as you approach or exceed your budget.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Will I get notified if I overspend?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Absolutely. Savvify sends smart alerts when you’re nearing or crossing your budget to help you stay in control of your spending.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Is my data safe with Savvify?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Yes, your privacy is our top priority. All data is encrypted, and we never share or sell your personal information.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Can I track spending app-wise?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Yes, Savvify breaks down your spending per app, so you can clearly see where your money is going each month.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <div class="container">
+            <h2>Take Control of<br>Your Delivery Spending</h2>
+            <p>Start tracking your orders, setting smarter budgets, and saving money—one meal at a time.</p>
+        </div>
+    </section>
+
+
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // FAQ Accordion functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const icon = question.querySelector('span');
+                
+                if (answer.style.display === 'block') {
+                    answer.style.display = 'none';
+                    icon.textContent = '+';
+                } else {
+                    // Close all other FAQ items
+                    document.querySelectorAll('.faq-answer').forEach(ans => {
+                        ans.style.display = 'none';
+                    });
+                    document.querySelectorAll('.faq-question span').forEach(ic => {
+                        ic.textContent = '+';
+                    });
+                    
+                    // Open clicked item
+                    answer.style.display = 'block';
+                    icon.textContent = '−';
+                }
+            });
+        });
+
+        // Add scroll effect to header
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(10, 10, 10, 0.95)';
+            } else {
+                header.style.background = 'rgba(10, 10, 10, 0.9)';
+            }
+        });
+
+        // Add animation on scroll for service cards
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Apply animation to service cards
+        document.querySelectorAll('.service-card, .testimonial-card, .tool-item').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+
+        // Add hover effect to CTA buttons
+        document.querySelectorAll('.cta-button').forEach(button => {
+            button.addEventListener('mouseenter', () => {
+                button.style.boxShadow = '0 10px 30px rgba(154, 255, 0, 0.3)';
+            });
+            
+            button.addEventListener('mouseleave', () => {
+                button.style.boxShadow = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
+{% endblock content %}

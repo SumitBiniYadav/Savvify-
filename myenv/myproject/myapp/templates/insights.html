@@ -1,0 +1,401 @@
+{% extends "header.html" %}
+{% block content %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vigraph - Service</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 60vh;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23111" width="1200" height="600"/><g fill="%23222"><circle cx="200" cy="150" r="50"/><circle cx="800" cy="400" r="30"/><circle cx="1000" cy="200" r="40"/></g></svg>');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, #9aff00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .breadcrumb {
+            color: #aaa;
+            margin-bottom: 2rem;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Service Section */
+        .service-section {
+            padding: 5rem 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .service-content h3 {
+            color: #9aff00;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .service-content h2 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+
+        .service-content p {
+            color: #ccc;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .learn-more-btn {
+            background: transparent;
+            border: 2px solid #9aff00;
+            color: #9aff00;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .learn-more-btn:hover {
+            background: #9aff00;
+            color: #000;
+        }
+
+        .service-image {
+            height: 500px; /* increased height for larger image */
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .service-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* shows full image without cropping */
+            border-radius: 12px;
+        }
+
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .service-item {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .service-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #9aff00;
+        }
+
+        .service-item h4 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-item p {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* How We Work Section */
+        .work-section {
+            padding: 5rem 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .work-image {
+            height: 500px; /* Large and visible */
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none; /* Remove gradient */
+            position: relative;
+        }
+
+        .work-image::before {
+            display: none; /* Remove emoji overlay */
+        }
+
+        .work-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Show full image without cutting */
+            border-radius: 12px;
+        }
+
+        .work-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .work-content p {
+            color: #ccc;
+            margin-bottom: 2rem;
+        }
+
+        .work-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            color: #ccc;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-item::before {
+            content: "✓";
+            color: #9aff00;
+            margin-right: 0.5rem;
+            font-weight: bold;
+        }
+
+        /* Brands Section */
+        .brands-section {
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .brands-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .brand-logo {
+            background: rgba(255, 255, 255, 0.05);
+            height: 80px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #fff;
+            transition: all 0.3s;
+        }
+
+        .brand-logo:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400"><rect fill="%23111" width="1200" height="400"/><g fill="%23333"><circle cx="300" cy="200" r="100" opacity="0.3"/><circle cx="900" cy="150" r="80" opacity="0.2"/></g></svg>');
+            padding: 5rem 0;
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .cta-section h3 {
+            color: #9aff00;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .cta-section h2 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+
+        .get-started-btn {
+            background: linear-gradient(45deg, #ff6b6b, #9aff00);
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            transition: transform 0.3s;
+            display: inline-block;
+        }
+
+        .get-started-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .service-section,
+            .work-section {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .services-grid,
+            .brands-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .service-content h2,
+            .work-content h2,
+            .cta-section h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="breadcrumb">Home / Insights</div>
+            <h1>Insights</h1>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Service Section -->
+        <section class="service-section">
+            <div class="service-content">
+                <h3>Transforming Your Eating and Spending Habits</h3>
+                <h2>Why Eating and Spending Are Connected</h2>
+                <p>Your food choices and spending habits often go hand-in-hand. Unplanned spending frequently leads to impulse food purchases, unhealthy fast-food meals, and snacks that are both costly and lacking in nutrition. Mindful changes in one area can positively influence the other, leading to healthier lifestyles and improved financial stability.</p>
+                <a href="#" class="learn-more-btn">Learn More</a>
+            </div>
+            <div class="service-image">
+                <img src="{% static 'img/baninsights.jpeg' %}" alt="Insights Image">
+            </div>
+        </section>
+
+        <!-- Services Grid -->
+        <section class="services-grid">
+            <div class="service-item">
+                <div class="service-icon"><span class="material-symbols-outlined">checkbook</span></div>
+                <h4>Plan Meals</h4>
+                <p>Prepare a weekly meal plan and shopping list. This reduces impulse buys and ensures you have nutritious options on hand.</p>
+            </div>
+            <div class="service-item">
+                <div class="service-icon"><span class="material-symbols-outlined">skillet</span></div>
+                <h4>Cook at Home</h4>
+                <p>Homemade meals are usually healthier and more cost-effective than dining out.</p>
+            </div>
+            <div class="service-item">
+                <div class="service-icon"><span class="material-symbols-outlined">washoku</span></div>
+                <h4>Portion Control</h4>
+                <p>Being aware of serving sizes prevents overeating and saves money by stretching ingredients further.</p>
+            </div>
+            <div class="service-item">
+                <div class="service-icon"><span class="material-symbols-outlined">mindfulness</span></div>
+                <h4>Mindful Eating</h4>
+                <p>Focus on your meals without distractions, so you recognize when you’re full, reducing food waste</p>
+            </div>
+        </section>
+
+        <!-- How We Work Section -->
+        <section class="work-section">
+            <div class="work-image">
+                <img src="{% static 'img/insightimg.jpeg' %}" alt="Insights Image">
+            </div>
+            <div class="work-content">
+                <h2>How to Improve Your Spending Habits</h2>
+                <p>Improving your spending habits starts with tracking where your money goes and setting a realistic budget. Focus on separating needs from wants, and avoid impulse purchases by waiting before you buy. Using UPI or cash instead of credit cards can help you stay mindful of your expenses. Try to automate your savings and cut down on unnecessary subscriptions or frequent takeout. Small, consistent changes like these can lead to better financial control over time.</p>
+                <div class="work-features">
+                    <div class="feature-item">Track Expenses</div>
+                    <div class="feature-item">Set a Budget for Groceries</div>
+                    <div class="feature-item">Aenean mattis eros</div>
+                    <div class="feature-item">Limit Eating Out</div>
+                    <div class="feature-item">Shop with a List</div>
+                    <div class="feature-item">Evaluate Cost vs. Health</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Brands Section -->
+        <section class="brands-section">
+            <div class="brands-grid">
+                <div class="brand-logo">healthline</div>
+                <div class="brand-logo">positivepsychology</div>
+                <div class="brand-logo">webmd</div>
+                <div class="brand-logo">calm</div>
+                <div class="brand-logo">nerdwallet</div>
+                <div class="brand-logo">ynab</div>
+                <div class="brand-logo">moneycontrol</div>
+                <div class="brand-logo">thebalancemoney</div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h3>Break the Fast Food Habit</h3>
+            <h2>Cut Costs, Not Cravings—With Savvify</h2>
+        </section>
+    </main>
+</body>
+</html>
+
+{% endblock content %}

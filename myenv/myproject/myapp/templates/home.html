@@ -1,0 +1,1219 @@
+{% extends "header.html" %}
+{% block content %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savvify Dashboard - Smart Spending Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Arial', sans-serif;
+            background-color: #000;
+            color: #fff;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 15px 0;
+            z-index: 1000;
+            border-bottom: 1px solid #333;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .logo::before {
+            content: "ነ";
+            margin-right: 8px;
+            background: #fff;
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 3px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #ccc;
+        }
+
+        .contact-btn {
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .contact-btn:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+            position: relative;
+        }
+
+        /* Dashboard Header */
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding: 2rem 0;
+        }
+
+        .dashboard-title {
+            font-size: 4rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: 2px;
+            background: linear-gradient(45deg, #fff, #9aff00); /* your original gradient */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        .dashboard-subtitle {
+            font-size: 16px;
+            color: #888;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Order Fetch Section */
+        .order-fetch-section {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            transition: all 0.3s ease;
+        }
+
+        .order-fetch-section:hover {
+            background: #1a1a1a;
+            border-color: #444;
+        }
+
+        .fetch-section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .fetch-section-icon {
+            width: 60px;
+            height: 60px;
+            background: #222;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #fff;
+        }
+
+        .fetch-section-title {
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: #fff;
+            letter-spacing: -0.01em;
+        }
+
+        .fetch-section-description {
+            color: #ccc;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        .fetch-btn {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .fetch-btn:hover {
+            background: #ccc;
+            transform: translateY(-2px);
+        }
+
+        .fetch-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Card Styling */
+        .card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            background: #1a1a1a;
+            border-color: #444;
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 400;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: #222;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .card-icon {
+            background: #333;
+        }
+
+        /* Spending Overview */
+        .spending-overview {
+            text-align: center;
+        }
+
+        .total-spent {
+            font-size: 3rem;
+            font-weight: 300;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .period {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .spending-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            background: #222;
+            border: 1px solid #333;
+        }
+
+        .spending-change.positive {
+            color: #ff6b6b;
+        }
+
+        .spending-change.negative {
+            color: #4ECDC4;
+        }
+
+        /* Budget Tracker */
+        .budget-tracker {
+            text-align: center;
+        }
+
+        .budget-circle {
+            width: 10rem;
+            height: 10rem;
+            margin: 0 auto 1.5rem;
+            position: relative;
+        }
+
+        .budget-progress {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                #fff 0deg, 
+                #fff var(--progress, 0deg), 
+                #333 var(--progress, 0deg), 
+                #333 360deg
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .budget-inner {
+            width: 8rem;
+            height: 8rem;
+            border-radius: 50%;
+            background: #111;
+            border: 1px solid #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .budget-spent {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .budget-total {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 0.25rem;
+        }
+
+        .budget-status {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .budget-status.on-track { color: #4ECDC4; }
+        .budget-status.warning { color: #ffa500; }
+        .budget-status.danger { color: #ff6b6b; }
+
+        .budget-days {
+            font-size: 14px;
+            color: #888;
+        }
+
+        /* App Spending */
+        .app-spending {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .app-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background: #222;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .app-item:hover {
+            background: #2a2a2a;
+            border-color: #444;
+            transform: translateX(4px);
+        }
+
+        .app-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .zomato { background: #ff6b6b; }
+        .swiggy { background: #ff8c00; }
+        .blinkit { background: #ffd700; color: #333; }
+        .instamart { background: #32cd32; }
+        .bigbasket { background: #ff4500; }
+
+        .app-details {
+            flex: 1;
+        }
+
+        .app-name {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .app-orders {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .app-amount {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .order-time {
+            font-size: 12px;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+
+        /* Alerts */
+        .alerts {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            background: #222;
+            transition: all 0.3s ease;
+        }
+
+        .alert:hover {
+            transform: translateX(4px);
+            background: #2a2a2a;
+        }
+
+        .alert-warning { border-color: #ffa500; }
+        .alert-danger { border-color: #ff6b6b; }
+        .alert-info { border-color: #4ECDC4; }
+
+        .alert-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+            margin-top: 0.125rem;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            color: #fff;
+        }
+
+        .alert-message {
+            font-size: 14px;
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        /* Order Count Badge */
+        .order-count {
+            background: #f7f7f7ff;
+            color: #000;
+            padding: 0.25rem 0.5rem;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        /* Empty State */
+        .empty-orders {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #888;
+        }
+
+        .empty-orders-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        .action-btn {
+            padding: 1rem 1.5rem;
+            border: 1px solid #333;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .action-btn.primary {
+            background: #fff;
+            color: #000;
+        }
+
+        .action-btn.primary:hover {
+            background: #ccc;
+        }
+
+        .action-btn.secondary {
+            background: transparent;
+            color: #fff;
+        }
+
+        .action-btn.secondary:hover {
+            background: #222;
+            border-color: #444;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #000;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Fetch Result */
+        #fetchResult {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .success {
+            background: rgba(78, 205, 196, 0.1);
+            border: 1px solid #4ECDC4;
+            color: #4ECDC4;
+        }
+
+        .error {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid #ff6b6b;
+            color: #ff6b6b;
+        }
+
+        .info {
+            background: rgba(255, 165, 0, 0.1);
+            border: 1px solid #ffa500;
+            color: #ffa500;
+        }
+
+        /* Budget Modal */
+        .budget-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .budget-modal-content {
+            background: #111;
+            border: 1px solid #333;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        .budget-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #333;
+        }
+
+        .budget-modal-title {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #fff;
+        }
+
+        .close-btn {
+            background: #222;
+            border: 1px solid #333;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #fff;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #333;
+        }
+
+        .budget-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #fff;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            padding: 1rem;
+            border: 1px solid #333;
+            border-radius: 8px;
+            font-size: 16px;
+            background: #222;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #fff;
+            background: #2a2a2a;
+        }
+
+        .budget-suggestions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .suggestion-btn {
+            padding: 0.75rem 1rem;
+            border: 1px solid #333;
+            border-radius: 20px;
+            background: #222;
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .suggestion-btn:hover {
+            border-color: #fff;
+            background: #fff;
+            color: #000;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .modal-btn {
+            padding: 0.875rem 1.5rem;
+            border: 1px solid #333;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .modal-btn.primary {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+
+        .modal-btn.primary:hover {
+            background: #ccc;
+        }
+
+        .modal-btn.secondary {
+            background: transparent;
+            color: #fff;
+        }
+
+        .modal-btn.secondary:hover {
+            background: #222;
+        }
+
+        /* Animations */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .container {
+                padding: 5rem 1rem 2rem;
+            }
+
+            .dashboard-title {
+                font-size: 2.5rem;
+            }
+
+            .card, .order-fetch-section {
+                padding: 1.5rem;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .budget-modal-content {
+                margin: 10% auto;
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-title {
+                font-size: 2rem;
+            }
+
+            .total-spent {
+                font-size: 2.5rem;
+            }
+
+            .card, .order-fetch-section {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                SAVVIFY
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#home">Dashboard</a></li>
+                    <li><a href="#about">Reports</a></li>
+                    <li><a href="#settings">Settings</a></li>
+                </ul>
+            </nav>
+            <a href="#contact" class="contact-btn">Profile</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Dashboard</h1>
+            <p class="dashboard-subtitle">Smart insights for smarter spending decisions</p>
+        </div>
+
+        <!-- Order Fetch Section -->
+        <div class="order-fetch-section">
+            <div class="fetch-section-header">
+                <div class="fetch-section-icon">
+                    <span class="material-symbols-outlined">sync</span>
+                </div>
+                <div>
+                    <h3 class="fetch-section-title">Sync Your Orders</h3>
+                    <p class="fetch-section-description">Automatically fetch your latest orders from all connected platforms</p>
+                </div>
+            </div>
+            <button class="fetch-btn" id="fetchOrdersBtn" onclick="fetchOrders()">
+                <span class="material-symbols-outlined">download</span>
+                <span id="fetchBtnText">Fetch New Orders</span>
+            </button>
+            <div id="fetchResult"></div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Spending Overview -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="material-symbols-outlined">trending_up</span>
+                        Monthly Spending
+                    </div>
+                    <div class="card-icon">
+                        <span class="material-symbols-outlined">account_balance_wallet</span>
+                    </div>
+                </div>
+                <div class="spending-overview">
+                    <div class="total-spent" id="totalSpent">₹{{ total_spent|default:"0" }}</div>
+                    <div class="period">{{ current_month|default:"February 2025" }}</div>
+                    <div class="spending-change positive">
+                        <span class="material-symbols-outlined">trending_up</span>
+                        <span>+18% from last month</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Budget Tracker -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="material-symbols-outlined">target</span>
+                        Budget Progress
+                    </div>
+                    <div class="card-icon">
+                        <span class="material-symbols-outlined">donut_large</span>
+                    </div>
+                </div>
+                <div class="budget-tracker">
+                    <div class="budget-circle">
+                        <div class="budget-progress" id="budgetProgress" style="--progress: {{ budget_progress_deg|default:'0' }}deg;">
+                            <div class="budget-inner">
+                                <div class="budget-spent" id="budgetPercentage">{{ budget_percentage|default:'0' }}%</div>
+                                <div class="budget-total" id="budgetTotal">of ₹{{ monthly_budget|default:'0' }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="budget-status {{ budget_status_class|default:'on-track' }}" id="budgetStatus">{{ budget_status|default:'No Budget Set' }}</div>
+                    <div class="budget-days" id="budgetDays">{{ days_remaining|default:'0' }} days remaining</div>
+                    {% if not monthly_budget %}
+                    <button class="action-btn primary" onclick="setBudget()" style="margin-top: 1rem; width: 100%;">
+                        <span class="material-symbols-outlined">add</span>
+                        Set Monthly Budget
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- App-wise Spending -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="material-symbols-outlined">apps</span>
+                        Platform Analytics
+                    </div>
+                    <div class="card-icon">
+                        <span class="material-symbols-outlined">pie_chart</span>
+                    </div>
+                </div>
+                <div class="app-spending">
+                    {% for app in app_spending %}
+                    <div class="app-item">
+                        <div class="app-logo {{ app.platform|lower }}">
+                            {% if app.platform == 'Zomato' %}<img src="{% static 'img/zomato.png' %}" alt="Zomatologo">
+                            {% elif app.platform == 'Swiggy' %}<img src="{% static 'img/swiggy.png' %}" alt="swiggylogo">
+                            {% elif app.platform == 'Blinkit' %}<img src="{% static 'img/blinkit.png' %}" alt="blinkitlogo">
+                            {% elif app.platform == 'Instamart' %}<img src="{% static 'img/Instamartlogo.png' %}" alt="Instamartlogo">
+                            {% elif app.platform == 'BigBasket' %}<img src="{% static 'img/bigbasket.png' %}" alt="bigbasketlogo">
+                            {% elif app.platform == 'Dominos' %}<img src="{% static 'img/Dominos.png' %}" alt="Dominos">
+                            {% else %}{{ app.platform|first }}{% endif %}
+                        </div>
+                        <div class="app-details">
+                            <div class="app-name">{{ app.platform }}</div>
+                            <div class="app-orders">{{ app.order_count }} orders this month</div>
+                        </div>
+                        <div class="app-amount">₹{{ app.total_amount }}</div>
+                    </div>
+                    {% empty %}
+                    <div class="empty-orders">
+                        <div class="empty-orders-icon">
+                            <span class="material-symbols-outlined">shopping_cart</span>
+                        </div>
+                        <p>No orders found. Click "Fetch New Orders" to sync your data.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Smart Alerts -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="material-symbols-outlined">notifications_active</span>
+                        Smart Insights
+                    </div>
+                    <div class="card-icon">
+                        <span class="material-symbols-outlined">lightbulb</span>
+                    </div>
+                </div>
+                <div class="alerts">
+                    {% if alerts %}
+                        {% for alert in alerts %}
+                        <div class="alert alert-{{ alert.type }}">
+                            <div class="alert-icon">
+                                <span class="material-symbols-outlined">
+                                    {% if alert.type == 'warning' %}warning
+                                    {% elif alert.type == 'danger' %}error
+                                    {% else %}lightbulb{% endif %}
+                                </span>
+                            </div>
+                            <div class="alert-content">
+                                <div class="alert-title">{{ alert.title }}</div>
+                                <div class="alert-message">{{ alert.message }}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                    <div class="alert alert-info">
+                        <div class="alert-icon"><span class="material-symbols-outlined">lightbulb</span></div>
+                        <div class="alert-content">
+                            <div class="alert-title">Welcome to Savvify!</div>
+                            <div class="alert-message">Start by fetching your orders to get personalized insights and spending analysis.</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Recent Orders -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="material-symbols-outlined">history</span>
+                        Recent Activity
+                        <span class="order-count" id="orderCount">{{ orders.count|default:"0" }}</span>
+                    </div>
+                    <div class="card-icon">
+                        <span class="material-symbols-outlined">schedule</span>
+                    </div>
+                </div>
+                <div class="app-spending" id="recentOrders">
+                    {% for order in orders %}
+                    <div class="app-item">
+                        <div class="app-logo {{ order.platform|lower }}">
+                            {% if order.platform == 'Zomato' %}<img src="{% static 'img/zomato.png' %}" alt="Zomato">
+                            {% elif order.platform == 'Swiggy' %}S
+                            {% elif order.platform == 'Blinkit' %}B
+                            {% elif order.platform == 'Instamart' %}I
+                            {% elif order.platform == 'BigBasket' %}BB
+                            {% elif order.platform == 'Dominos' %}<img src="{% static 'img/Dominos.png' %}" alt="Dominos">
+                            {% else %}{{ order.platform|first }}{% endif %}
+                        </div>
+                        <div class="app-details">
+                            <div class="app-name">{{ order.restaurant_name|default:order.platform }}</div>
+                            <div class="app-orders">{{ order.items|length|default:"1" }} items</div>
+                            <div class="order-time">{{ order.order_date|timesince }} ago</div>
+                        </div>
+                        <div class="app-amount">₹{{ order.amount }}</div>
+                    </div>
+                    {% empty %}
+                    <div class="empty-orders">
+                        <div class="empty-orders-icon">
+                            <span class="material-symbols-outlined">receipt_long</span>
+                        </div>
+                        <p>No orders found. Click "Fetch New Orders" to sync your data.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Monthly Trends -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="material-symbols-outlined">show_chart</span>
+                        Monthly Trends
+                    </div>
+                    <div class="card-icon">
+                        <span class="material-symbols-outlined">analytics</span>
+                    </div>
+                </div>
+                <div class="app-spending">
+                    <div class="app-item">
+                        <div class="app-logo" style="background: #4ECDC4;">
+                            <span class="material-symbols-outlined">calendar_month</span>
+                        </div>
+                        <div class="app-details">
+                            <div class="app-name">Average Order Value</div>
+                            <div class="app-orders">Based on last 30 days</div>
+                        </div>
+                        <div class="app-amount">₹{{ avg_order_value|default:"0" }}</div>
+                    </div>
+                    <div class="app-item">
+                        <div class="app-logo" style="background: #ffa500;">
+                            <span class="material-symbols-outlined">trending_up</span>
+                        </div>
+                        <div class="app-details">
+                            <div class="app-name">Most Active Day</div>
+                            <div class="app-orders">{{ most_active_day|default:"Sunday" }}</div>
+                        </div>
+                        <div class="app-amount">{{ most_active_day_orders|default:"0" }} orders</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <a href="{% url 'reports' user.pk %}" class="action-btn secondary">
+                <span class="material-symbols-outlined">assessment</span>
+                View Detailed Reports
+            </a>
+            <a href="{% url 'export_data' %}" class="action-btn secondary" download>
+                <span class="material-symbols-outlined">download</span>
+                Export Data
+            </a>
+            <a href="#settings" class="action-btn secondary">
+                <span class="material-symbols-outlined">settings</span>
+                Preferences
+            </a>
+            <a href="{% url 'set-budget'%}" class="action-btn secondary">
+                <span class="material-symbols-outlined">target</span>
+                Set Budget Goal
+            </a>
+        </div>
+    </div>
+
+    <!-- Budget Modal -->
+    <div id="budgetModal" class="budget-modal">
+        <div class="budget-modal-content">
+            <div class="budget-modal-header">
+                <h2 class="budget-modal-title">Set Monthly Budget</h2>
+                <button class="close-btn" onclick="closeBudgetModal()">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <form class="budget-form" onsubmit="saveBudget(event)">
+                <div class="form-group">
+                    <label class="form-label" for="budgetAmount">Monthly Budget Amount</label>
+                    <input type="number" id="budgetAmount" class="form-input" placeholder="Enter amount in ₹" min="100" step="100" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Quick Suggestions</label>
+                    <div class="budget-suggestions">
+                        <button type="button" class="suggestion-btn" onclick="setBudgetAmount(5000)">₹5,000</button>
+                        <button type="button" class="suggestion-btn" onclick="setBudgetAmount(10000)">₹10,000</button>
+                        <button type="button" class="suggestion-btn" onclick="setBudgetAmount(15000)">₹15,000</button>
+                        <button type="button" class="suggestion-btn" onclick="setBudgetAmount(20000)">₹20,000</button>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn secondary" onclick="closeBudgetModal()">Cancel</button>
+                    <button type="submit" class="modal-btn primary">Save Budget</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Fetch Orders Function
+        async function fetchOrders() {
+            const btn = document.getElementById('fetchOrdersBtn');
+            const btnText = document.getElementById('fetchBtnText');
+            const result = document.getElementById('fetchResult');
+            
+            // Show loading state
+            btn.disabled = true;
+            btnText.innerHTML = '<span class="loading-spinner"></span> Fetching...';
+            
+            try {
+                const response = await fetch('/fetch-orders/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    result.innerHTML = `<div class="success">✓ Successfully fetched ${data.count} new orders!</div>`;
+                    // Reload page after 2 seconds to show updated data
+                    setTimeout(() => location.reload(), 2000);
+                } else {
+                    result.innerHTML = `<div class="error">⚠ ${data.message}</div>`;
+                }
+            } catch (error) {
+                result.innerHTML = '<div class="error">⚠ Failed to fetch orders. Please try again.</div>';
+            } finally {
+                // Reset button state
+                btn.disabled = false;
+                btnText.innerHTML = '<span class="material-symbols-outlined">download</span> Fetch New Orders';
+            }
+        }
+
+        // Budget Modal Functions
+        function setBudget() {
+            window.location.href = "{% url 'set-budget'%}";
+        }
+
+       
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('budgetModal');
+            if (event.target === modal) {
+                closeBudgetModal();
+            }
+        }
+
+        // CSRF Token Helper
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Auto-refresh data every 5 minutes
+        setInterval(() => {
+            const lastFetch = localStorage.getItem('lastOrderFetch');
+            const now = new Date().getTime();
+            
+            if (!lastFetch || (now - parseInt(lastFetch)) > 300000) { // 5 minutes
+                fetchOrders();
+                localStorage.setItem('lastOrderFetch', now.toString());
+            }
+        }, 300000);
+
+        // Update budget progress animation on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const budgetProgress = document.getElementById('budgetProgress');
+            if (budgetProgress) {
+                const progress = budgetProgress.style.getPropertyValue('--progress');
+                budgetProgress.style.setProperty('--progress', '0deg');
+                setTimeout(() => {
+                    budgetProgress.style.setProperty('--progress', progress);
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>
+
+{% endblock %}

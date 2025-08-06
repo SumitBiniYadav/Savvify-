@@ -1,0 +1,934 @@
+{% extends "header.html" %}
+{% block content %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savvify Reports - Detailed Analytics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(135deg, #000 0%, #111 50%, #000 100%);
+        color: #fff;
+        line-height: 1.6;
+        min-height: 100vh;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+
+    /* Animated Background */
+    .bg-animation {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: 0.05;
+    }
+
+
+    .floating-circle {
+        position: absolute;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #fff, #f0f0f0);
+        animation: float 8s ease-in-out infinite;
+    }
+
+
+    .floating-circle:nth-child(1) {
+        width: 100px;
+        height: 100px;
+        top: 10%;
+        left: 5%;
+        animation-delay: -1s;
+    }
+
+
+    .floating-circle:nth-child(2) {
+        width: 150px;
+        height: 150px;
+        top: 70%;
+        right: 5%;
+        animation-delay: -4s;
+    }
+
+
+    .floating-circle:nth-child(3) {
+        width: 80px;
+        height: 80px;
+        bottom: 30%;
+        left: 15%;
+        animation-delay: -2s;
+    }
+
+
+    .floating-circle:nth-child(4) {
+        width: 60px;
+        height: 60px;
+        top: 40%;
+        right: 20%;
+        animation-delay: -6s;
+    }
+
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        25% { transform: translateY(-30px) rotate(90deg); }
+        50% { transform: translateY(-15px) rotate(180deg); }
+        75% { transform: translateY(-45px) rotate(270deg); }
+    }
+
+
+    /* Main Container */
+    .main-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 50px 20px;
+    }
+
+
+    /* Header Section */
+    .reports-header {
+        text-align: center;
+        margin-bottom: 50px;
+        padding: 40px 0;
+    }
+
+
+    .reports-title {
+        font-size: 48px;
+        font-weight: 600;
+        margin-bottom: 12px;
+        background: linear-gradient(135deg, #fff, #ccc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: -0.02em;
+    }
+
+
+    .reports-subtitle {
+        font-size: 18px;
+        color: #ccc;
+        font-weight: 400;
+        opacity: 0.9;
+    }
+
+
+    /* Card Styling */
+    .card, .filter-section {
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(15px);
+        border-radius: 24px;
+        padding: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+
+    .card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+    }
+
+
+    /* Filter Section */
+    .filter-section {
+        margin-bottom: 40px;
+    }
+
+
+    .filter-controls {
+        display: flex;
+        gap: 20px;
+        align-items: end;
+        flex-wrap: wrap;
+    }
+
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+
+    .filter-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #ccc;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+
+    .filter-select, .filter-input {
+        padding: 12px 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        color: #fff;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        min-width: 180px;
+    }
+
+
+    .filter-select:focus, .filter-input:focus {
+        outline: none;
+        border-color: #fff;
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+    }
+
+
+    .filter-btn {
+        background: linear-gradient(45deg, #fff, #f0f0f0);
+        color: #000;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
+    }
+
+
+    .filter-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(255, 255, 255, 0.3);
+    }
+
+
+    /* Reports Grid */
+    .reports-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+
+    .wide-card {
+        grid-column: 1 / -1;
+        margin-bottom: 20px;
+    }
+
+
+    .half-card {
+        grid-column: span 1;
+    }
+
+
+    /* Card Header */
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+
+    .card-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+
+    .card-title .material-symbols-outlined {
+        font-size: 28px;
+        color: #fff;
+    }
+
+
+    /* Stats Grid */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+
+    .stat-item {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 25px;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        text-align: center;
+    }
+
+
+    .stat-item:hover {
+        transform: translateY(-5px);
+        border-color: #fff;
+        box-shadow: 0 15px 30px rgba(255, 255, 255, 0.2);
+    }
+
+
+    .stat-value {
+        font-size: 32px;
+        font-weight: bold;
+        color: #fff;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+
+    .stat-label {
+        color: #ccc;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+
+    .stat-change {
+        font-size: 12px;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+
+    .stat-change.positive {
+        background: rgba(76, 175, 80, 0.2);
+        color: #4caf50;
+    }
+
+
+    .stat-change.negative {
+        background: rgba(244, 67, 54, 0.2);
+        color: #f44336;
+    }
+
+
+    /* Chart Container */
+    .chart-container {
+        position: relative;
+        height: 300px;
+        margin-bottom: 20px;
+    }
+
+
+    .chart-container.large {
+        height: 400px;
+    }
+
+
+    /* Table Styling */
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+
+    .data-table th {
+        padding: 16px;
+        text-align: left;
+        font-weight: 600;
+        color: #ccc;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+
+    .data-table td {
+        padding: 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        color: #fff;
+    }
+
+
+    .data-table tr:hover {
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+
+    .platform-cell {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+
+    .platform-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 16px;
+    }
+
+
+    .zomato { background: linear-gradient(135deg, #ff6b6b, #ff5252); }
+    .swiggy { background: linear-gradient(135deg, #ff8c00, #ff6f00); }
+    .blinkit { background: linear-gradient(135deg, #ffd700, #ffcc02); color: #333; }
+    .instamart { background: linear-gradient(135deg, #32cd32, #4caf50); }
+    .bigbasket { background: linear-gradient(135deg, #ff4500, #ff5722); }
+
+
+    /* Export Actions */
+    .export-actions {
+        display: flex;
+        gap: 20px;
+        margin-top: 40px;
+        flex-wrap: wrap;
+    }
+
+
+    .export-btn {
+        padding: 12px 24px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        color: #fff;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+    }
+
+
+    .export-btn:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+        color: #fff;
+    }
+
+
+    .export-btn.primary {
+        background: linear-gradient(45deg, #fff, #f0f0f0);
+        color: #000;
+        border-color: transparent;
+    }
+
+
+    .export-btn.primary:hover {
+        box-shadow: 0 10px 20px rgba(255, 255, 255, 0.3);
+        color: #000;
+    }
+
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+        .reports-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+
+    @media (max-width: 768px) {
+        .main-container {
+            padding: 30px 15px;
+        }
+
+
+        .reports-title {
+            font-size: 36px;
+        }
+
+
+        .card, .filter-section {
+            padding: 25px;
+        }
+
+
+        .filter-controls {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+
+        .filter-btn {
+            margin-left: 0;
+            margin-top: 10px;
+        }
+
+
+        .export-actions {
+            flex-direction: column;
+        }
+
+
+        .wide-card {
+            grid-column: 1;
+        }
+
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+
+        .chart-container {
+            height: 250px;
+        }
+
+
+        .chart-container.large {
+            height: 300px;
+        }
+    }
+
+
+    @media (max-width: 480px) {
+        .reports-title {
+            font-size: 28px;
+        }
+
+
+        .card, .filter-section {
+            padding: 20px;
+        }
+    }
+</style>
+
+
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
+    </div>
+
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Reports Header -->
+        <div class="reports-header">
+            <h1 class="reports-title">Analytics & Reports</h1>
+            <p class="reports-subtitle">Comprehensive insights into your spending patterns and trends</p>
+        </div>
+
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-controls">
+                <div class="filter-group">
+                    <label class="filter-label">Time Period</label>
+                    <select class="filter-select" id="timePeriod">
+                        <option value="last_30_days">Last 30 Days</option>
+                        <option value="last_3_months">Last 3 Months</option>
+                        <option value="last_6_months">Last 6 Months</option>
+                        <option value="this_year">This Year</option>
+                        <option value="custom">Custom Range</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Platform</label>
+                    <select class="filter-select" id="platform">
+                        <option value="all">All Platforms</option>
+                        <option value="zomato">Zomato</option>
+                        <option value="swiggy">Swiggy</option>
+                        <option value="blinkit">Blinkit</option>
+                        <option value="instamart">Instamart</option>
+                        <option value="bigbasket">BigBasket</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Category</label>
+                    <select class="filter-select" id="category">
+                        <option value="all">All Categories</option>
+                        <option value="food_delivery">Food Delivery</option>
+                        <option value="grocery">Grocery</option>
+                        <option value="quick_commerce">Quick Commerce</option>
+                    </select>
+                </div>
+                <button class="filter-btn" onclick="applyFilters()">
+                    <span class="material-symbols-outlined">filter_alt</span>
+                    Apply Filters
+                </button>
+            </div>
+        </div>
+
+
+        <!-- Key Statistics -->
+        <div class="card wide-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <span class="material-symbols-outlined">insights</span>
+                    Key Metrics Overview
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value">₹{{ total_spent|default_if_none:"0"|floatformat:0 }}</div>
+                    <div class="stat-label">Total Spent</div>
+                    <div class="stat-change {{ spent_change_class }}">
+                        <span class="material-symbols-outlined">
+                            {% if spent_change_class == "positive" %}trending_down
+                            {% elif spent_change_class == "negative" %}trending_up
+                            {% else %}remove{% endif %}
+                        </span>
+                        {{ real_spent_change }}
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">{{ total_orders|default_if_none:"0" }}</div>
+                    <div class="stat-label">Total Orders</div>
+                    <div class="stat-change {{ order_change_class }}">
+                        <span class="material-symbols-outlined">
+                            {% if order_change_class == "positive" %}trending_up
+                            {% elif order_change_class == "negative" %}trending_down
+                            {% else %}remove{% endif %}
+                        </span>
+                        {{ real_order_change }}
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">₹{{ avg_order|default_if_none:"0"|floatformat:0 }}</div>
+                    <div class="stat-label">Avg Order Value</div>
+                    <div class="stat-change {{ avg_change_class }}">
+                        <span class="material-symbols-outlined">
+                            {% if avg_change_class == "positive" %}trending_up
+                            {% elif avg_change_class == "negative" %}trending_down
+                            {% else %}remove{% endif %}
+                        </span>
+                        {{ real_avg_change }}
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">
+                        {{ platforms_used|default_if_none:"0" }}
+                    </div>
+                    <div class="stat-label">Platforms Used</div>
+                    <div class="stat-change">
+                        <span class="material-symbols-outlined">remove</span>
+                        No change
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="reports-grid">
+            <!-- Spending Trend Chart -->
+            <div class="card wide-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="material-symbols-outlined">show_chart</span>
+                        Spending Trends
+                    </div>
+                </div>
+                <div class="chart-container large">
+                    <canvas id="spendingTrendChart"></canvas>
+                </div>
+            </div>
+
+
+            <!-- Platform Distribution -->
+            <div class="card half-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="material-symbols-outlined">pie_chart</span>
+                        Platform Distribution
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="platformChart"></canvas>
+                </div>
+            </div>
+
+
+            <!-- Monthly Comparison -->
+            <div class="card half-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="material-symbols-outlined">calendar_month</span>
+                        Monthly Comparison
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+            </div>
+
+
+            <!-- Order Frequency -->
+            <div class="card half-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="material-symbols-outlined">schedule</span>
+                        Order Frequency
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="frequencyChart"></canvas>
+                </div>
+            </div>
+
+
+            <!-- Platform Performance -->
+            <div class="card half-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="material-symbols-outlined">leaderboard</span>
+                        Platform Performance
+                    </div>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Platform</th>
+                                <th>Orders</th>
+                                <th>Total Spent</th>
+                                <th>Avg Order</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for platform in platform_stats %}
+                            <tr>
+                                <td>
+                                    <div class="platform-cell">
+                                        <div class="platform-icon {{ platform.name|lower }}">
+                                            {% if platform.name == 'Zomato' %}
+                                                <img src="{% static 'img/zomato.png' %}" alt="Zomatologo">
+                                            {% elif platform.name == 'Swiggy' %}
+                                                <img src="{% static 'img/swiggy.png' %}" alt="Swiggylogo">
+                                            {% elif platform.name == 'Blinkit' %}
+                                                <img src="{% static 'img/blinkit.png' %}" alt="Blinkitlogo">
+                                            {% elif platform.name == 'Instamart' %}
+                                                <img src="{% static 'img/Instamartlogo.png' %}" alt="Instamartlogo">
+                                            {% elif platform.name == 'BigBasket' %}
+                                                <img src="{% static 'img/bigbasket.png' %}" alt="BigBasketlogo">
+                                            {% elif platform.name == 'Dominos' %}
+                                                <img src="{% static 'img/Dominos.png' %}" alt="Dominoslogo">
+                                            {% endif %}
+                                        </div>
+                                        {{ platform.name }}
+                                    </div>
+                                </td>
+                                <td>{{ platform.orders }}</td>
+                                <td>₹{{ platform.total }}</td>
+                                <td>₹{{ platform.average }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center py-4">
+                                    <strong>No records found.</strong>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Export Actions -->
+        <div class="export-actions">
+            <button class="export-btn primary" onclick="generatePDFReport()">
+                <span class="material-symbols-outlined">picture_as_pdf</span>
+                Export PDF Report
+            </button>
+            <button class="export-btn" onclick="exportToExcel()">
+                <span class="material-symbols-outlined">table_view</span>
+                Export to Excel
+            </button>
+            <button class="export-btn" onclick="exportToCSV()">
+                <span class="material-symbols-outlined">csv</span>
+                Export to CSV
+            </button>
+            <a href="{% url 'home'%}" class="export-btn">
+                <span class="material-symbols-outlined">arrow_back</span>
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+
+    <script>
+// Chart.js Configuration with dark theme
+Chart.defaults.color = 'rgba(255, 255, 255, 0.7)';
+Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
+
+// Spending Trend Chart
+const spendingCtx = document.getElementById('spendingTrendChart').getContext('2d');
+new Chart(spendingCtx, {
+    type: 'line',
+    data: {
+        labels: [{% for point in spending_trends %}"{{ point.month }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+        datasets: [{
+            label: 'Monthly Spending',
+            data: [{% for point in spending_trends %}{{ point.total }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+            borderColor: '#fff',
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.4,
+            pointBackgroundColor: '#fff',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: '#fff'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                ticks: {
+                    callback: v => '₹' + v.toLocaleString()
+                }
+            },
+            x: { grid: { color: 'rgba(255, 255, 255, 0.1)' } }
+        }
+    }
+});
+
+// Platform Distribution Chart
+const platformCtx = document.getElementById('platformChart').getContext('2d');
+new Chart(platformCtx, {
+    type: 'doughnut',
+    data: {
+        labels: [{% for platform in platform_distribution %}"{{ platform.platform }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+        datasets: [{
+            data: [{% for platform in platform_distribution %}{{ platform.total }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+            backgroundColor: ['#ff6b6b','#ff8c00','#ffd700','#32cd32','#ff4500'],
+            borderWidth: 2,
+            borderColor: '#000'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: { padding:20, usePointStyle:true, color:'#fff' }
+            }
+        }
+    }
+});
+
+// Monthly Comparison Chart
+const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+new Chart(monthlyCtx, {
+    type: 'bar',
+    data: {
+        labels: ['Current Month','Last Month','Avg Last 3M'],
+        datasets: [{
+            data: [
+                {{ monthly_comparison.current|default:0 }},
+                {{ monthly_comparison.last|default:0 }},
+                {{ monthly_comparison.avg_3m|default:0 }}
+            ],
+            backgroundColor: ['#fff','rgba(255,255,255,0.7)','rgba(255,255,255,0.5)'],
+            borderRadius: 8,
+            borderSkipped: false
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                ticks: {
+                    callback: v => '₹' + v.toLocaleString()
+                }
+            },
+            x: { grid: { display: false } }
+        }
+    }
+});
+
+// Order Frequency Chart (Radar)
+const frequencyCtx = document.getElementById('frequencyChart').getContext('2d');
+new Chart(frequencyCtx, {
+    type: 'radar',
+    data: {
+        labels: [{% for k in order_frequency.keys %}"{{ k }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+        datasets: [{
+            label: 'Orders',
+            data: [{% for v in order_frequency.values %}{{ v }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+            borderColor: '#fff',
+            backgroundColor: 'rgba(255,255,255,0.1)',
+            borderWidth: 2,
+            pointBackgroundColor: '#fff',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: '#fff',
+            pointRadius: 5,
+            pointHoverRadius: 7
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+            r: {
+                beginAtZero: true,
+                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                pointLabels: { color: 'rgba(255,255,255,0.7)', font:{size:12} },
+                ticks: { display: false }
+            }
+        }
+    }
+});
+</script>
+
+
+</body>
+{% endblock content %}
+</html>

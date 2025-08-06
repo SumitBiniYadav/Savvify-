@@ -1,0 +1,888 @@
+{% extends "header.html" %}
+{% block content %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Monthly Budget - Savvify</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Arial', sans-serif;
+            background-color: #000;
+            color: #fff;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 15px 0;
+            z-index: 1000;
+            border-bottom: 1px solid #333;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .logo::before {
+            content: "ነ";
+            margin-right: 8px;
+            background: #fff;
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 3px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #ccc;
+        }
+
+        .contact-btn {
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .contact-btn:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 2rem;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .breadcrumb a {
+            color: #888;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .breadcrumb a:hover {
+            color: #fff;
+        }
+
+        .breadcrumb-separator {
+            color: #555;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .page-title {
+            font-size: 3.5rem;
+            font-weight: 300;
+            color: #fff;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .page-subtitle {
+            font-size: 18px;
+            color: #888;
+            font-weight: 400;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Budget Card */
+        .budget-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .budget-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #4ECDC4, #ffa500, #ff6b6b);
+            opacity: 0.8;
+        }
+
+        .budget-card:hover {
+            background: #1a1a1a;
+            border-color: #444;
+            transform: translateY(-5px);
+        }
+
+        /* Current Budget Display */
+        .current-budget {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #333;
+        }
+
+        .current-amount {
+            font-size: 4rem;
+            font-weight: 200;
+            color: #4ECDC4;
+            margin-bottom: 0.5rem;
+            letter-spacing: -2px;
+        }
+
+        .current-label {
+            color: #888;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .budget-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .budget-status.active {
+            background: rgba(78, 205, 196, 0.1);
+            border: 1px solid #4ECDC4;
+            color: #4ECDC4;
+        }
+
+        .budget-status.inactive {
+            background: rgba(136, 136, 136, 0.1);
+            border: 1px solid #888;
+            color: #888;
+        }
+
+        /* Budget Form */
+        .budget-form {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .form-title {
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-description {
+            color: #ccc;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* Amount Input Section */
+        .amount-input-section {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .currency-symbol {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            color: #888;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .amount-input {
+            width: 100%;
+            padding: 1.5rem 1.5rem 1.5rem 3.5rem;
+            border: 2px solid #333;
+            border-radius: 12px;
+            font-size: 2rem;
+            font-weight: 300;
+            background: #222;
+            color: #fff;
+            text-align: center;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .amount-input:focus {
+            outline: none;
+            border-color: #4ECDC4;
+            background: #2a2a2a;
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.1);
+        }
+
+        .amount-input::placeholder {
+            color: #666;
+            font-weight: 300;
+        }
+
+        /* Quick Amount Suggestions */
+        .quick-amounts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .amount-btn {
+            padding: 1rem 1.5rem;
+            border: 1px solid #333;
+            border-radius: 10px;
+            background: #222;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .amount-btn:hover {
+            border-color: #4ECDC4;
+            background: rgba(78, 205, 196, 0.1);
+            color: #4ECDC4;
+            transform: translateY(-2px);
+        }
+
+        .amount-btn.selected {
+            border-color: #4ECDC4;
+            background: #4ECDC4;
+            color: #000;
+        }
+
+        .amount-value {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .amount-label {
+            font-size: 12px;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Budget Tips */
+        .budget-tips {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .tips-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .tips-icon {
+            width: 40px;
+            height: 40px;
+            background: #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #ffa500;
+        }
+
+        .tips-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        .tips-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .tip-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .tip-item::before {
+            content: "💡";
+            font-size: 16px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 140px;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #fff;
+            color: #000;
+            border: 2px solid #fff;
+        }
+
+        .btn-primary:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #fff;
+            border: 2px solid #333;
+        }
+
+        .btn-secondary:hover {
+            background: #333;
+            border-color: #555;
+            transform: translateY(-2px);
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            border-top-color: #000;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Success/Error Messages */
+        .message {
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .message.success {
+            background: rgba(78, 205, 196, 0.1);
+            border: 1px solid #4ECDC4;
+            color: #4ECDC4;
+        }
+
+        .message.error {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid #ff6b6b;
+            color: #ff6b6b;
+        }
+
+        .message.info {
+            background: rgba(255, 165, 0, 0.1);
+            border: 1px solid #ffa500;
+            color: #ffa500;
+        }
+
+        /* Usage Statistics */
+        .usage-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #333;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #4ECDC4;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Animations */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .budget-card {
+            animation: fadeInUp 0.6s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .container {
+                padding: 6rem 1rem 2rem;
+            }
+
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .budget-card {
+                padding: 2rem;
+            }
+
+            .current-amount {
+                font-size: 3rem;
+            }
+
+            .amount-input {
+                font-size: 1.5rem;
+                padding: 1.25rem 1.25rem 1.25rem 3rem;
+            }
+
+            .quick-amounts {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .usage-stats {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .budget-card {
+                padding: 1.5rem;
+            }
+
+            .current-amount {
+                font-size: 2.5rem;
+            }
+
+            .quick-amounts {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                SAVVIFY
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="{% url 'home' %}">Dashboard</a></li>
+                    <li><a href="{% url 'reports' user.pk %}">Reports</a></li>
+                    <li><a href="#settings">Settings</a></li>
+                </ul>
+            </nav>
+            <a href="#profile" class="contact-btn">Profile</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="{% url 'home' %}">Dashboard</a>
+            <span class="breadcrumb-separator">></span>
+            <span>Set Budget</span>
+        </div>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Set Your Monthly Budget</h1>
+            <p class="page-subtitle">Take control of your spending by setting a realistic monthly budget. We'll help you track your progress and stay on target.</p>
+        </div>
+
+        <!-- Messages -->
+        {% if messages %}
+            {% for message in messages %}
+            <div class="message {{ message.tags }}">
+                <span class="material-symbols-outlined">
+                    {% if message.tags == 'success' %}check_circle
+                    {% elif message.tags == 'error' %}error
+                    {% else %}info{% endif %}
+                </span>
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Budget Card -->
+        <div class="budget-card">
+            <!-- Current Budget Display -->
+            {% if current_budget %}
+            <div class="current-budget">
+                <div class="current-amount">₹{{ current_budget.monthly_budget|floatformat:0 }}</div>
+                <div class="current-label">Current Monthly Budget</div>
+                <div class="budget-status active">
+                    <span class="material-symbols-outlined">check_circle</span>
+                    Active Budget
+                </div>
+                <div class="usage-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">₹{{ spent_this_month|default:"0"|floatformat:0 }}</div>
+                        <div class="stat-label">Spent This Month</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">₹{{ remaining_budget|default:"0"|floatformat:0 }}</div>
+                        <div class="stat-label">Remaining</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">{{ budget_progress|default:"0" }}%</div>
+                        <div class="stat-label">Budget Used</div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="current-budget">
+                <div class="current-amount">₹0</div>
+                <div class="current-label">No Budget Set</div>
+                <div class="budget-status inactive">
+                    <span class="material-symbols-outlined">radio_button_unchecked</span>
+                    No Active Budget
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Budget Form -->
+            <form class="budget-form" method="POST" id="budgetForm">
+                {% csrf_token %}
+                <div class="form-header">
+                    <h3 class="form-title">
+                        {% if current_budget %}Update Your Budget{% else %}Set Your First Budget{% endif %}
+                    </h3>
+                    <p class="form-description">
+                        Choose an amount that fits your lifestyle and spending habits. You can always adjust it later.
+                    </p>
+                </div>
+
+                <!-- Amount Input -->
+                <div class="amount-input-section">
+                    <div class="currency-symbol">₹</div>
+                    <input 
+                        type="number" 
+                        name="monthly_budget" 
+                        id="budgetAmount" 
+                        class="amount-input" 
+                        placeholder="Enter amount" 
+                        min="100" 
+                        step="100" 
+                        value="{{ current_budget.monthly_budget|default:'' }}"
+                        required
+                    >
+                </div>
+
+                <!-- Quick Amount Suggestions -->
+                <div class="quick-amounts">
+                    <button type="button" class="amount-btn" onclick="setBudgetAmount(5000)">
+                        <span class="amount-value">₹5,000</span>
+                        <span class="amount-label">Conservative</span>
+                    </button>
+                    <button type="button" class="amount-btn" onclick="setBudgetAmount(10000)">
+                        <span class="amount-value">₹10,000</span>
+                        <span class="amount-label">Moderate</span>
+                    </button>
+                    <button type="button" class="amount-btn" onclick="setBudgetAmount(15000)">
+                        <span class="amount-value">₹15,000</span>
+                        <span class="amount-label">Comfortable</span>
+                    </button>
+                    <button type="button" class="amount-btn" onclick="setBudgetAmount(20000)">
+                        <span class="amount-value">₹20,000</span>
+                        <span class="amount-label">Liberal</span>
+                    </button>
+                    <button type="button" class="amount-btn" onclick="setBudgetAmount(30000)">
+                        <span class="amount-value">₹30,000</span>
+                        <span class="amount-label">Premium</span>
+                    </button>
+                    <button type="button" class="amount-btn" onclick="showCustomInput()">
+                        <span class="amount-value">Custom</span>
+                        <span class="amount-label">Your Choice</span>
+                    </button>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <a href="{% url 'home'  %}" class="btn btn-secondary">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <span class="material-symbols-outlined">save</span>
+                        <span id="submitText">{% if current_budget %}Update Budget{% else %}Set Budget{% endif %}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Budget Tips -->
+        <div class="budget-tips">
+            <div class="tips-header">
+                <div class="tips-icon">
+                    <span class="material-symbols-outlined">lightbulb</span>
+                </div>
+                <h3 class="tips-title">Smart Budgeting Tips</h3>
+            </div>
+            <div class="tips-list">
+                <div class="tip-item">Start with your average monthly spending and add 10-20% buffer for unexpected cravings.</div>
+                <div class="tip-item">Consider your income and other expenses - food delivery should ideally be 10-15% of your total budget.</div>
+                <div class="tip-item">Set alerts at 75% and 90% of your budget to get warnings before overspending.</div>
+                <div class="tip-item">Review and adjust your budget monthly based on your actual spending patterns.</div>
+                <div class="tip-item">Use Savvify's insights to identify areas where you can save without compromising on satisfaction.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set budget amount from quick buttons
+        function setBudgetAmount(amount) {
+            const input = document.getElementById('budgetAmount');
+            input.value = amount;
+            
+            // Update button states
+            document.querySelectorAll('.amount-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            event.target.closest('.amount-btn').classList.add('selected');
+            
+            // Add animation
+            input.style.transform = 'scale(1.02)';
+            setTimeout(() => {
+                input.style.transform = 'scale(1)';
+            }, 200);
+        }
+
+        // Show custom input focus
+        function showCustomInput() {
+            const input = document.getElementById('budgetAmount');
+            input.focus();
+            input.select();
+            
+            // Update button states
+            document.querySelectorAll('.amount-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            event.target.closest('.amount-btn').classList.add('selected');
+        }
+
+        // Form submission with loading state
+        document.getElementById('budgetForm').addEventListener('submit', function(e) {
+            const submitBtn = document.getElementById('submitBtn');
+            const submitText = document.getElementById('submitText');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitText.innerHTML = '<span class="loading-spinner"></span> Saving...';
+        });
+
+        // Input validation and formatting
+        document.getElementById('budgetAmount').addEventListener('input', function(e) {
+            const value = parseInt(e.target.value);
+            
+            // Remove selected state from quick buttons if custom amount
+            const quickAmounts = [5000, 10000, 15000, 20000, 30000];
+            if (!quickAmounts.includes(value)) {
+                document.querySelectorAll('.amount-btn').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+            }
+            
+            // Update submit button state
+            const submitBtn = document.getElementById('submitBtn');
+            if (value >= 100) {
+                submitBtn.disabled = false;
+            } else {
+                submitBtn.disabled = true;
+            }
+        });
+
+        // Format number input with thousands separator
+        document.getElementById('budgetAmount').addEventListener('blur', function(e) {
+            const value = parseInt(e.target.value);
+            if (!isNaN(value) && value >= 100) {
+                // Ensure minimum value
+                if (value < 100) {
+                    e.target.value = 100;
+                }
+            }
+        });
+
+        // Auto-save draft (optional feature)
+        let saveTimeout;
+        document.getElementById('budgetAmount').addEventListener('input', function(e) {
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => {
+                const value = e.target.value;
+                if (value && value >= 100) {
+                    localStorage.setItem('draft_budget', value);
+                }
+            }, 1000);
+        });
+
+        // Load draft on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const draftBudget = localStorage.getItem('draft_budget');
+            const currentInput = document.getElementById('budgetAmount');
+            
+            if (draftBudget && !currentInput.value) {
+                currentInput.value = draftBudget;
+            }
+        });
+
+        // Clear draft on successful submission
+        window.addEventListener('beforeunload', function() {
+            // Only clear if form was submitted successfully
+            if (document.querySelector('.message.success')) {
+                localStorage.removeItem('draft_budget');
+            }
+        });
+    </script>
+</body>
+</html>
+
+{% endblock %}

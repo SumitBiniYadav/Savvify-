@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savvify - Connect Your Account</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000;
+            color: #fff;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .logo::before {
+            content: "ነ";
+            margin-right: 8px;
+            background: #fff;
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 3px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #ccc;
+        }
+
+        .contact-btn {
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .contact-btn:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 20px 60px;
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23111" width="1200" height="800"/><g fill="%23333"><circle cx="200" cy="200" r="2"/><circle cx="400" cy="150" r="1.5"/><circle cx="600" cy="300" r="2"/><circle cx="800" cy="100" r="1"/><circle cx="1000" cy="250" r="1.5"/></g></svg>');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .connect-container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(17, 17, 17, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .connect-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #808080ff, #000000ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 32px;
+        }
+
+        .connect-title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .connect-subtitle {
+            color: #888;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+        }
+
+        .connect-description {
+            color: #ccc;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        .connection-benefits {
+            text-align: left;
+            margin-bottom: 40px;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        .benefit-item::before {
+            content: "✓";
+            color: #4CAF50;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .connect-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .btn.btn-gmail {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: #fff;
+            color: #000;
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn.btn-gmail:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
+        }
+
+        .gmail-logo {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #e7c7c4ff, #0a0a0aff, #251818ff, #4285f4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .btn.btn-secondary {
+            background: transparent;
+            border: 1px solid #666;
+            color: #ccc;
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .btn.btn-secondary:hover {
+            border-color: #fff;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Nested button styling for btn-secondary */
+        .btn.btn-secondary button {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: inherit;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .security-note {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.4;
+            margin-top: 20px;
+        }
+
+        .security-note .material-symbols-outlined {
+            font-size: 14px;
+            vertical-align: middle;
+            margin-right: 5px;
+            color: #4CAF50;
+        }
+
+        /* Progress Indicator */
+        .progress-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 40px;
+        }
+
+        .progress-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #333;
+            transition: all 0.3s;
+        }
+
+        .progress-dot.active {
+            background: #fff;
+        }
+
+        /* Footer */
+        .footer {
+            background: #111;
+            padding: 40px 0 20px;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 12px;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            color: #888;
+            font-size: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .connect-container {
+                margin: 0 20px;
+                padding: 40px 30px;
+            }
+            
+            .connect-title {
+                font-size: 2rem;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        /* Animation */
+        .connect-container {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                SAVVIFY
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">Contact Us</a></li>
+                </ul>
+            </nav>
+            <a href="#contact" class="contact-btn">Connect</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="connect-container">
+            <!-- Progress Indicator -->
+            <div class="progress-indicator">
+                <div class="progress-dot"></div>
+                <div class="progress-dot active"></div>
+                <div class="progress-dot"></div>
+            </div>
+
+            <div class="connect-icon">
+                <span class="material-symbols-outlined">link</span>
+            </div>
+            
+            <h1 class="connect-title">Connect Your Account</h1>
+            <p class="connect-subtitle">Step 2 of 3</p>
+            
+            <p class="connect-description">
+                Connect your Gmail account to automatically track your delivery app purchases and get personalized spending insights.
+            </p>
+
+            <div class="connection-benefits">
+                <div class="benefit-item">Automatic expense tracking from email receipts</div>
+                <div class="benefit-item">Secure data encryption and privacy protection</div>
+                <div class="benefit-item">Instant setup with zero manual data entry</div>
+                <div class="benefit-item">Smart categorization of food and grocery spending</div>
+            </div>
+
+            <div class="connect-buttons">
+                <a href="{% url 'connect_gmail' %}" class="btn btn-gmail">
+                    <span class="gmail-logo">G</span>
+                    <span>Connect with Gmail</span>
+                </a>
+                
+                <a href="{% url 'intro' %}" class='btn btn-secondary'>
+                    <button class="btn btn-secondary" type="button">
+                        Skip for now
+                    </button>
+                </a>
+            </div>
+
+            <div class="security-note">
+                <span class="material-symbols-outlined">security</span>
+                Your data is encrypted and secure. We only read delivery app receipts to track your spending.
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Security</a>
+                <a href="#">Support</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Savvify | Built with ❤️ to make your money go further</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+
+
+        // Add some interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate progress dots
+            const dots = document.querySelectorAll('.progress-dot');
+            setTimeout(() => {
+                dots[0].classList.add('active');
+            }, 500);
+        });
+    </script>
+</body>
+</html>

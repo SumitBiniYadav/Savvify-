@@ -1,0 +1,15 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Django database
+db.sqlite3
+
+# Virtual environment
+venv/
+
+# API keys & secrets
+credentials.json
+
+
+myenv/
