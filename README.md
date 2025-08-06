@@ -197,24 +197,7 @@ Run specific app tests:
 python manage.py test apps.tracking
 ```
 
-## 🚀 Deployment
-
-### Using Heroku
-1. Install Heroku CLI
-2. Create Heroku app: `heroku create savvify-app`
-3. Set environment variables: `heroku config:set SECRET_KEY=your-key`
-4. Deploy: `git push heroku main`
-
-### Using Docker
-```bash
-# Build image
-docker build -t savvify .
-
-# Run container
-docker run -p 8000:8000 savvify
-```
-
-## 📈 Roadmap
+Roadmap
 
 - [ ] Mobile app development (React Native)
 - [ ] Advanced analytics with ML insights
@@ -242,16 +225,6 @@ We welcome contributions! Please follow these steps:
 - Update documentation as needed
 - Use meaningful commit messages
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🐛 Issues & Support
-
-If you encounter any issues or have questions:
-- Check the [Issues](https://github.com/SumitBiniYadav/Savvify-/issues) page
-- Create a new issue with detailed description
-- Contact: [your-email@example.com]
 
 ## 👨‍💻 Author
 
