@@ -254,6 +254,7 @@ We welcome contributions! Please follow these steps:
 
 ### Dashboard Overview
 ![Dashboard](screenshots/dashboard.png)
+
 *Comprehensive dashboard with spending insights, budget tracking, and platform analytics*
 
 ## 🎨 UI/UX Features
